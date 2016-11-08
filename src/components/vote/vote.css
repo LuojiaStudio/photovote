@@ -1,0 +1,23 @@
+.checkbox-wrapper {
+    width: 25px;
+    display: inline-block;
+}
+.vote-item-component {
+    width: 80%;
+    margin: 20px auto;
+}
+
+.vote-float-btn {
+    position: fixed;
+    right: 25px;
+    bottom:50px;
+}
+.vote-page-more-btn {
+    display: block !important;
+    position: relative !important;
+    margin: 10px auto !important;
+}
+.more-btn-wrapper{
+    width: 100%;
+    text-align: center;
+}
