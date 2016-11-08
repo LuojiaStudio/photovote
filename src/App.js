@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Router, Route, hashHistory } from 'react-router'
 import Header from './components/public/header';
 import Footer from './components/public/footer';
 import LoginBox from './components/login/loginbox';
@@ -14,7 +15,11 @@ class App extends Component {
       <div className="App">
         <MuiThemeProvider>
           <div>
-           <VotePage/>
+            <Router history={hashHistory}>
+               <Route path="/" component={LoginBox}/>
+               <Route path="/vote" component={VotePage}/>
+               <Route path="/selected" component={SelectedPage}/>
+            </Router>
           </div>
         </MuiThemeProvider>
       </div>
