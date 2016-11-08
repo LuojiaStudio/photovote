@@ -1,13 +1,22 @@
 .login-box-component {
-    padding: 100px 30px;
+    padding: 0;
+}
+.text-wrapper{
+    padding-top: 30px;
+    width: 80%;
+    margin: 30px auto;
 }
 .login-input {
-    margin-bottom: 20px;
+    display: block !important;
+    margin: 10px auto;
     width: 100%;
 }
 .login-raised-btn{
-    margin-top: 30px;
+    display: block !important;
+    width: 90%;
+    margin:30px auto;
 }
 .login-flat-btn {
-    margin-top: 15px;
+    display: block !important;
+    margin: 0 auto !important;
 }

@@ -15,8 +15,8 @@ class VoteItem extends Component {
             <div className="vote-item-component">
                 <Card className="vote-card">
                     <CardHeader
-                      title="标题"
-                      subtitle="专业摄影组"
+                      title={this.props.data.name}
+                      subtitle={this.props.data.group}
                       avatar={
                           <div className="checkbox-wrapper">
                            <Checkbox className="card-header-checkbox"/>
@@ -24,7 +24,13 @@ class VoteItem extends Component {
                       }
                     />
                     <CardMedia>
-                        <img src={img} />
+                        {
+                            this.props.data.photo.map((path) => {
+                                return (
+                                    <img src={path} alt={path}/>
+                                )
+                            })
+                        }
                     </CardMedia>
                 </Card>
 
