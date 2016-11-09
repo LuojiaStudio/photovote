@@ -9,6 +9,7 @@ import Snackbar from 'material-ui/Snackbar';
 import Footer from '../public/footer'
 import AppBar from 'material-ui/AppBar';
 import './login.css';
+import $ from 'jquery';
 
 
 class LoginBox extends Component {
@@ -24,6 +25,7 @@ class LoginBox extends Component {
     }
 
     handleClick = () => {
+        window.location.replace("/#/vote/none");
         this.setState({
             open: true,
         });
@@ -48,7 +50,19 @@ class LoginBox extends Component {
     };
 
     handleCheckClick = () => {
+        let sid = this.state.sid;
         //TODO:提交数据，验证返回值
+        $.ajax({
+            method: "POST",
+            url: "http://127.0.0.1:8000/gettoken/",
+            data: {
+                sid: this.state.sid,
+                password: this.state.password,
+            }
+        }).done(function (data) {
+            console.log(data)
+            window.location.replace("/#/vote/"+data.token+"/"+sid);
+        })
     };
 
 
@@ -80,6 +94,7 @@ class LoginBox extends Component {
                         label="开始验证"
                         className="login-raised-btn"
                         primary={true}
+                        onClick={this.handleCheckClick}
 
                     />
                     <FlatButton

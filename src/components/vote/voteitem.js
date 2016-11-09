@@ -1,36 +1,72 @@
 /**
  * Created by Jsceoz on 2016/11/8.
  */
-import React, { Component } from 'react';
-import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import React, { Component, PropTypes } from 'react';
+import {Card,  CardHeader, CardMedia,  } from 'material-ui/Card';
 import Checkbox from 'material-ui/Checkbox';
+import { Carousel } from 'antd';
 import img from './1.jpg';
 import './vote.css'
 
 
-
 class VoteItem extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            checked: false,
+        }
+    }
+
+    handleCheck() {
+        let id = this.props.item.id;
+        let bool = !this.state.checked;
+        switch (bool) {
+            case true:
+                this.props.onCheck(id);
+                break;
+            case false:
+                this.props.onCancel(id);
+                break;
+            default:
+                return;
+        }
+
+        this.setState({
+            checked:bool
+        });
+        //console.log(this.state.checked)
+    }
+
+
     render() {
+        //console.log(this.props);
         return (
             <div className="vote-item-component">
                 <Card className="vote-card">
                     <CardHeader
-                      title={this.props.data.name}
-                      subtitle={this.props.data.group}
+                      subtitle={'当前票数:'+this.props.item.vote}
                       avatar={
                           <div className="checkbox-wrapper">
-                           <Checkbox className="card-header-checkbox"/>
+                           <Checkbox
+                               disabled={this.props.disable}
+                               className="card-header-checkbox"
+                               onCheck={this.handleCheck.bind(this)}
+                           />
                           </div>
                       }
                     />
                     <CardMedia>
+                        <div className="carousel-wrapper">
+                        <Carousel dots={false}>
                         {
-                            this.props.data.photo.map((path) => {
+                            this.props.item.photos.map((photo) => {
                                 return (
-                                    <img src={path} alt={path}/>
+                                    <img src={photo} alt={'ssdss'+photo+'ss'}/>
                                 )
                             })
                         }
+                        </Carousel>
+                        </div>
                     </CardMedia>
                 </Card>
 
@@ -38,5 +74,12 @@ class VoteItem extends Component {
         )
     }
 }
+
+VoteItem.propTypes = {
+    disable: PropTypes.bool,
+    item: PropTypes.object,
+    onCheck: PropTypes.func.isRequired,
+    onCancel: PropTypes.func.isRequired,
+};
 
 export default VoteItem;

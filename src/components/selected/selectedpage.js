@@ -3,11 +3,11 @@
  */
 import React from 'react';
 import {List, ListItem} from 'material-ui/List';
-import ActionInfo from 'material-ui/svg-icons/action/info';
+//import ActionInfo from 'material-ui/svg-icons/action/info';
 import RaisedButton from 'material-ui/RaisedButton';
 import AppBar from 'material-ui/AppBar';
 import Paper from 'material-ui/Paper';
-import SvgIcon from 'material-ui/SvgIcon';
+//import SvgIcon from 'material-ui/SvgIcon';
 import Clear from 'material-ui/svg-icons/content/clear';
 
 import './selected.css'

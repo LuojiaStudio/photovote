@@ -12,12 +12,21 @@
     right: 25px;
     bottom:50px;
 }
+.vote-float-btn-change {
+    position: fixed;
+    right: 25px;
+    bottom: 130px;
+}
 .vote-page-more-btn {
     display: block !important;
     position: relative !important;
     margin: 10px auto !important;
 }
+
 .more-btn-wrapper{
     width: 100%;
     text-align: center;
+}
+.carousel-wrapper{
+    overflow: hidden;
 }
