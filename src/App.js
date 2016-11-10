@@ -5,7 +5,6 @@ import { Router, Route, hashHistory } from 'react-router'
 import LoginBox from './components/login/loginbox';
 //import VoteItem from './components/vote/voteitem';
 import VotePage from './components/vote/votepage';
-import SelectedPage from  './components/selected/selectedpage';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import './App.css';
 
@@ -18,7 +17,6 @@ class App extends Component {
             <Router history={hashHistory}>
                <Route path="/" component={LoginBox}/>
                <Route path="/vote/:token/:sid" component={VotePage}/>
-               <Route path="/selected" component={SelectedPage}/>
             </Router>
           </div>
         </MuiThemeProvider>

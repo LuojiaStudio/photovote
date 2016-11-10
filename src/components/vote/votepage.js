@@ -30,31 +30,48 @@ class VotePage extends React.Component {
             ],
             selectedList: [],
             currentGroup: 1,
+            nextGroup: 2,
             nextPage: '',
-            isNoMoreOpen: false,
+            stkOpen: false,
             disable: false,
+            errorMsg: '',
         };
     }
 
     componentDidMount() {
         //TODO 获取数据
-        if(this.props.params.token == 'none') {
+        if(this.props.params.token === 'none') {
             this.setState({
                 disable:true,
             })
         }
         this.getPhoto();
+        this.setState({
+            stkOpen: true,
+            errorMsg: '点击右边按钮切换分组和确认投票'
+        })
     }
 
     getPhoto() {
-        let url = "http://127.0.0.1:8000/p_w_i/?group=" + this.state.currentGroup;
-        this.serverRequest = $.get(url, function (data) {
+        let self = this;
+        let url = "http://api.whusu.com.cn/p_w_i/?group=" + this.state.currentGroup;
+        $.ajax({
+            method:"GET",
+            url: url,
+            beforeSend:function (xhr) {
+                self.setState({
+                    stkOpen:true,
+                    errorMsg: '努力加载中...'
+                })
+            }
+        }).done(function (data) {
             console.log(data);
-            this.setState({
+            self.setState({
                 voteItemList:data.results,
-                nextPage: data.next
+                nextPage: data.next,
+                stkOpen:false,
             });
-        }.bind(this));
+        });
     }
 
     addItem(id) {
@@ -76,44 +93,56 @@ class VotePage extends React.Component {
 
 
     getMore() {
-        if (this.state.nextPage == 'null') {
+        if (this.state.nextPage === 'null') {
             this.openNoMore();
             return;
         }
+        let self = this;
         let url = this.state.nextPage;
         let showList = this.state.voteItemList;
         let allList;
-        let nextUrl;
-        this.serverRequest = $.get(url, function (data) {
-            console.log(data);
-            console.log(showList);
+        this.serverRequest = $.ajax({
+            method: "GET",
+            url: url,
+            beforeSend:function (xhr) {
+                self.setState({
+                    stkOpen: true,
+                    errorMsg: '努力加载中...'
+                })
+            },
+        }).done(function (data) {
             allList = showList.concat(data.results);
-            console.log(showList);
-            this.setState({
+            self.setState({
                 voteItemList:allList,
-                nextPage: data.next
+                nextPage: data.next,
+                stkOpen:false,
             });
             if (data.next == null) {
-                this.setState({
+                self.setState({
                     nextPage: 'null'
                 })
             }
-
-        }.bind(this));
+        });
     }
 
 
     openNoMore() {
         this.setState({
-            isNoMoreOpen:true,
+            stkOpen:true,
+            errorMsg: '没有更多了'
         })
     }
 
     vote() {
-        //console.log(this.state.selectedList)dasd
+        if(this.state.selectedList.length < 5){
+            this.errorTooLess();
+            return;
+        }
+        //console.log(this.state.selectedList)dasddssdsadsa
         let token = this.props.params.token;
-        let url = 'http://127.0.0.1:8000/tt/';
+        let url = 'http://api.whusu.com.cn/tt/';
         let list = this.state.selectedList;
+        let self = this;
         for (let i = 0; i < list.length; i++) {
             $.ajax({
                 method: "POST",
@@ -124,30 +153,93 @@ class VotePage extends React.Component {
                     create_time: "0"
                 },
                 beforeSend: function (xhr) {
-                    xhr.setRequestHeader("Authorization", "Token " + token);
+                    xhr.setRequestHeader("Authorization", "Token "+token);
                 },
             }).done(function (data) {
-                console.log(data)
+                console.log(data);
+                if(data.info === 1) {
+                    self.errorOpen(1);
+                    return
+                }
+                else if(data.info === 2) {
+                    self.errorOpen(2);
+                    return
+                }
+
             })
+        }
+        this.errorOpen(3);
+    }
+
+
+    errorOpen(id) {
+        switch (id) {
+            case 2:
+                this.setState({
+                    errorMsg: '不能重复投票',
+                    stkOpen: true,
+                });
+                break;
+            case 1:
+                this.setState({
+                    errorMsg: '投票已达上限',
+                    stkOpen: true,
+                });
+                break;
+            case 3:
+                this.setState({
+                    errorMsg: '投票成功',
+                    stkOpen: true,
+                });
+                break;
+            default:
+                return
         }
     }
 
 
     handleActionTouchTap = () => {
         this.setState({
-            isNoMoreOpen: false,
+            stkOpen: false,
         });
     };
 
     changeGroup() {
         let id = this.state.currentGroup;
+        let self = this;
         id = id % 3 + 1;
+        let next_id = (id + 3) % 3 + 1;
         this.setState({
-            currentGroup:id
+            currentGroup:id,
+            nextGroup: next_id
         });
-        this.getPhoto();
+        let url = "http://api.whusu.com.cn/p_w_i/?group=" + this.state.nextGroup;
+        $.ajax({
+            method:"GET",
+            url: url,
+            beforeSend:function (xhr) {
+                self.setState({
+                    stkOpen:true,
+                    errorMsg: '努力加载中...'
+                })
+            }
+        }).done(function (data) {
+            console.log(data);
+            self.setState({
+                voteItemList:data.results,
+                nextPage: data.next,
+                stkOpen:false,
+            });
+        });
     }
 
+
+    errorTooLess() {
+        this.setState({
+            stkOpen:true,
+            errorMsg: "至少要选择5组作品.."
+        })
+    }
 
 
     render() {
@@ -204,8 +296,8 @@ class VotePage extends React.Component {
                     <AutoRenew/>
                 </FloatingActionButton>
                 <Snackbar
-                    open={this.state.isNoMoreOpen}
-                    message="已经没有了"
+                    open={this.state.stkOpen}
+                    message={this.state.errorMsg}
                     action="哦"
                     onClick={this.handleActionTouchTap}
                 />

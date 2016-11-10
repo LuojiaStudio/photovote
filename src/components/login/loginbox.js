@@ -25,9 +25,10 @@ class LoginBox extends Component {
     }
 
     handleClick = () => {
-        window.location.replace("/#/vote/none");
+        //window.location.replace("./#/vote/none/none");
         this.setState({
             open: true,
+            message: '投票尚未开始'
         });
     };
 
@@ -50,18 +51,47 @@ class LoginBox extends Component {
     };
 
     handleCheckClick = () => {
-        let sid = this.state.sid;
-        //TODO:提交数据，验证返回值
-        $.ajax({
-            method: "POST",
-            url: "http://127.0.0.1:8000/gettoken/",
-            data: {
-                sid: this.state.sid,
-                password: this.state.password,
-            }
-        }).done(function (data) {
-            console.log(data)
-            window.location.replace("/#/vote/"+data.token+"/"+sid);
+        //let sid = this.state.sid;
+        //let self = this;
+        //$.ajax({
+        //    method: "POST",
+         //   url: "http://api.whusu.com.cn/gettoken/",
+         //   data: {
+         //       sid: this.state.sid,
+          //      password: this.state.password,
+          //  },
+          //  beforeSend:function(xhr){
+          //      self.setState({
+         //           open: true,
+         //           message: '验证中...'
+         //       })
+         //   },
+        //}).done(function (data) {
+            {/*console.log(data);*/}
+            {/*if(data.info === 0){*/}
+                {/*self.setState({*/}
+        //             open: true,
+        //             message: '验证失败'
+        //         })
+        //     }
+        //     else if(data.info === 1){
+        //         self.setState({
+        //             open: true,
+        //             message: '您今天已经投过票了'
+        //         })
+        //     }
+        //     else {
+        //         self.setState({
+        //             open: true,
+        //             message: '验证成功，正在跳转'
+        //         });
+        //         let redirect = "window.location.replace('./#/vote/"+data.token+"/"+sid+"')";
+        //         setTimeout(redirect, 1000);
+        //     }
+        // })
+        this.setState({
+            open: true,
+            message: '投票尚未开始'
         })
     };
 

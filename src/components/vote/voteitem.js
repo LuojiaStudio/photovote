@@ -5,7 +5,6 @@ import React, { Component, PropTypes } from 'react';
 import {Card,  CardHeader, CardMedia,  } from 'material-ui/Card';
 import Checkbox from 'material-ui/Checkbox';
 import { Carousel } from 'antd';
-import img from './1.jpg';
 import './vote.css'
 
 
@@ -59,9 +58,9 @@ class VoteItem extends Component {
                         <div className="carousel-wrapper">
                         <Carousel dots={false}>
                         {
-                            this.props.item.photos.map((photo) => {
+                            this.props.item.photos.map((photo, index) => {
                                 return (
-                                    <img src={photo} alt={'ssdss'+photo+'ss'}/>
+                                    <img src={'http://whusu.oss-cn-qingdao.aliyuncs.com/photovote/'+this.props.item.group+'/'+this.props.item.name+'/'+ (index+1) +'.jpg?x-oss-process=style/votestyle'} alt={photo}/>
                                 )
                             })
                         }
