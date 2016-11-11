@@ -35,11 +35,13 @@ class VotePage extends React.Component {
             stkOpen: false,
             disable: false,
             errorMsg: '',
+            gOne: 0,
+            gTwo: 0,
+            gThree: 0,
         };
     }
 
     componentDidMount() {
-        //TODO 获取数据
         if(this.props.params.token === 'none') {
             this.setState({
                 disable:true,
@@ -74,21 +76,65 @@ class VotePage extends React.Component {
         });
     }
 
-    addItem(id) {
+    addItem(id,group) {
         let list = this.state.selectedList;
         list = [...list, id];
         this.setState({
             selectedList:list
         });
+        switch (group) {
+            case 1:
+                let newG1 = this.state.gOne + 1;
+                this.setState({
+                    gOne:newG1
+                });
+                break;
+            case 2:
+                let newG2 = this.state.gTwo + 1;
+                this.setState({
+                    gTwo:newG2
+                });
+                break;
+            case 3:
+                let newG3 = this.state.gThree + 1;
+                this.setState({
+                    gThree:newG3
+                });
+                break;
+            default:
+                break;
+        }
     }
 
-    delItem(id) {
+    delItem(id, group) {
         let list = this.state.selectedList;
         let num = list.indexOf(id);
         list.splice(num, 1);
         this.setState({
-            selectedList:list
+            selectedList: list
         });
+        switch (group) {
+            case 1:
+                let newG1 = this.state.gOne - 1;
+                this.setState({
+                    gOne: newG1
+                });
+                break;
+            case 2:
+                let newG2 = this.state.gTwo - 1;
+                this.setState({
+                    gTwo: newG2
+                });
+                break;
+            case 3:
+                let newG3 = this.state.gThree - 1;
+                this.setState({
+                    gThree: newG3
+                });
+                break;
+            default:
+                break;
+        }
     }
 
 
@@ -134,41 +180,55 @@ class VotePage extends React.Component {
     }
 
     vote() {
-        if(this.state.selectedList.length < 5){
-            this.errorTooLess();
-            return;
+        if(this.state.gOne > 10){
+            this.errorOpen(4)
         }
-        //console.log(this.state.selectedList)dasddssdsadsa
-        let token = this.props.params.token;
-        let url = 'http://api.whusu.com.cn/tt/';
-        let list = this.state.selectedList;
-        let self = this;
-        for (let i = 0; i < list.length; i++) {
-            $.ajax({
-                method: "POST",
-                url: url,
-                data: {
-                    school_id: this.props.params.sid,
-                    photographic_work_item: list[i],
-                    create_time: "0"
-                },
-                beforeSend: function (xhr) {
-                    xhr.setRequestHeader("Authorization", "Token "+token);
-                },
-            }).done(function (data) {
-                console.log(data);
-                if(data.info === 1) {
-                    self.errorOpen(1);
-                    return
-                }
-                else if(data.info === 2) {
-                    self.errorOpen(2);
-                    return
-                }
+        else if(this.state.gTwo > 10){
+            this.errorOpen(5)
+        }
+        else if(this.state.gThree > 10){
+            this.errorOpen(6)
+        }
+        else if(this.state.gOne < 5){
+            this.errorOpen(7)
+        }
+        else if(this.state.gTwo < 5){
+            this.errorOpen(8)
+        }
+        else if(this.state.gThree < 5){
+            this.errorOpen(9)
+        }
+        else {
+            //console.log(this.state.selectedList)dasddssdsadsa
+            let token = this.props.params.token;
+            let url = 'http://api.whusu.com.cn/tt/';
+            let list = this.state.selectedList;
+            let self = this;
+            for (let i = 0; i < list.length; i++) {
+                $.ajax({
+                    method: "POST",
+                    url: url,
+                    data: {
+                        school_id: this.props.params.sid,
+                        photographic_work_item: list[i],
+                        create_time: "0"
+                    },
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("Authorization", "Token " + token);
+                    },
+                }).done(function (data) {
+                    console.log(data);
+                    if (data.info === 1) {
+                        self.errorOpen(1);
+                    }
+                    else if (data.info === 2) {
+                        self.errorOpen(2);
+                    }
 
-            })
+                })
+            }
+            this.errorOpen(3);
         }
-        this.errorOpen(3);
     }
 
 
@@ -192,8 +252,54 @@ class VotePage extends React.Component {
                     stkOpen: true,
                 });
                 break;
+            case 4:
+                this.setState({
+                    errorMsg: '专业团体不能超过10个选项',
+                    stkOpen: true,
+                });
+                break;
+            case 5:
+                this.setState({
+                    errorMsg: '专业个人不能超过10个选项',
+                    stkOpen: true,
+                });
+                break;
+            case 6:
+                this.setState({
+                    errorMsg: '手机组不能超过10个选项',
+                    stkOpen: true,
+                });
+                break;
+            case 7:
+                this.setState({
+                    errorMsg: '专业团体不能少于5个选项',
+                    stkOpen: true,
+                });
+                break;
+            case 8:
+                this.setState({
+                    errorMsg: '专业个人不能少于5个选项',
+                    stkOpen: true,
+                });
+                break;
+            case 9:
+                this.setState({
+                    errorMsg: '手机组不能少于5个选项',
+                    stkOpen: true,
+                });
+                break;
             default:
                 return
+        }
+    }
+
+    checkCheck(id) {
+        let num = this.state.selectedList.indexOf(id);
+        if(num === -1) {
+            return false
+        }
+        else {
+            return true
         }
     }
 
@@ -270,6 +376,7 @@ class VotePage extends React.Component {
                                     disable={this.state.disable}
                                     onCheck={this.addItem.bind(this)}
                                     onCancel={this.delItem.bind(this)}
+                                    isCheck={this.checkCheck(item.id)}
                                 />
                             )
                         })

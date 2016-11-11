@@ -25,11 +25,11 @@ class LoginBox extends Component {
     }
 
     handleClick = () => {
-        //window.location.replace("./#/vote/none/none");
-        this.setState({
-            open: true,
-            message: '投票尚未开始'
-        });
+        window.location.replace("./#/vote/none/none");
+        // this.setState({
+        //     open: true,
+        //     message: '投票尚未开始'
+        // });
     };
 
     handleActionTouchTap = () => {
@@ -51,47 +51,49 @@ class LoginBox extends Component {
     };
 
     handleCheckClick = () => {
-        //let sid = this.state.sid;
-        //let self = this;
-        //$.ajax({
-        //    method: "POST",
-         //   url: "http://api.whusu.com.cn/gettoken/",
-         //   data: {
-         //       sid: this.state.sid,
-          //      password: this.state.password,
-          //  },
-          //  beforeSend:function(xhr){
-          //      self.setState({
-         //           open: true,
-         //           message: '验证中...'
-         //       })
-         //   },
-        //}).done(function (data) {
-            {/*console.log(data);*/}
-            {/*if(data.info === 0){*/}
-                {/*self.setState({*/}
-        //             open: true,
-        //             message: '验证失败'
-        //         })
-        //     }
-        //     else if(data.info === 1){
-        //         self.setState({
-        //             open: true,
-        //             message: '您今天已经投过票了'
-        //         })
-        //     }
-        //     else {
-        //         self.setState({
-        //             open: true,
-        //             message: '验证成功，正在跳转'
-        //         });
-        //         let redirect = "window.location.replace('./#/vote/"+data.token+"/"+sid+"')";
-        //         setTimeout(redirect, 1000);
-        //     }
-        // })
-        this.setState({
-            open: true,
-            message: '投票尚未开始'
+        let sid = this.state.sid;
+        let self = this;
+        $.ajax({
+           method: "POST",
+           url: "http://api.whusu.com.cn/gettoken/",
+           data: {
+               sid: this.state.sid,
+               password: this.state.password,
+           },
+           beforeSend:function(xhr){
+               self.setState({
+                   open: true,
+                   message: '验证中...'
+               })
+           },
+        }).done(function (data) {
+            console.log(data);
+            if(data.info === 0){
+                self.setState({
+                    open: true,
+                    message: '验证失败'
+                })
+            }
+            else if(data.info === 1){
+                self.setState({
+                    open: true,
+                    message: '您今天已经投过票了'
+                })
+            }
+            else if(data.token) {
+                self.setState({
+                    open: true,
+                    message: '验证成功，正在跳转'
+                });
+                let redirect = "window.location.replace('./#/vote/"+data.token+"/"+sid+"')";
+                setTimeout(redirect, 1000);
+            }
+            else {
+                self.setState({
+                    open: true,
+                    message: '网络异常'
+                })
+            }
         })
     };
 

@@ -16,15 +16,18 @@ class VoteItem extends Component {
         }
     }
 
+
+
     handleCheck() {
         let id = this.props.item.id;
-        let bool = !this.state.checked;
+        let bool = !this.props.isCheck;
+        let group = this.props.item.group;
         switch (bool) {
             case true:
-                this.props.onCheck(id);
+                this.props.onCheck(id,group);
                 break;
             case false:
-                this.props.onCancel(id);
+                this.props.onCancel(id,group);
                 break;
             default:
                 return;
@@ -47,6 +50,7 @@ class VoteItem extends Component {
                       avatar={
                           <div className="checkbox-wrapper">
                            <Checkbox
+                               checked={this.props.isCheck}
                                disabled={this.props.disable}
                                className="card-header-checkbox"
                                onCheck={this.handleCheck.bind(this)}
@@ -60,7 +64,7 @@ class VoteItem extends Component {
                         {
                             this.props.item.photos.map((photo, index) => {
                                 return (
-                                    <img src={'http://whusu.oss-cn-qingdao.aliyuncs.com/photovote/'+this.props.item.group+'/'+this.props.item.name+'/'+ (index+1) +'.jpg?x-oss-process=style/votestyle'} alt={photo}/>
+                                    <img src={'http://oss.whusu.com.cn/photovote/'+this.props.item.group+'/'+this.props.item.name+'/'+ (index+1) +'.jpg?x-oss-process=style/votestyle'} alt={photo}/>
                                 )
                             })
                         }
@@ -79,6 +83,7 @@ VoteItem.propTypes = {
     item: PropTypes.object,
     onCheck: PropTypes.func.isRequired,
     onCancel: PropTypes.func.isRequired,
+    isCheck: PropTypes.bool
 };
 
 export default VoteItem;
