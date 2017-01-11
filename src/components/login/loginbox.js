@@ -26,10 +26,6 @@ class LoginBox extends Component {
 
     handleClick = () => {
         window.location.replace("./#/vote/none/none");
-        // this.setState({
-        //     open: true,
-        //     message: '投票尚未开始'
-        // });
     };
 
     handleActionTouchTap = () => {

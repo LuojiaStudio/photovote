@@ -36,12 +36,10 @@ class VoteItem extends Component {
         this.setState({
             checked:bool
         });
-        //console.log(this.state.checked)
     }
 
 
     render() {
-        //console.log(this.props);
         return (
             <div className="vote-item-component">
                 <Card className="vote-card">

@@ -16,18 +16,7 @@ class VotePage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            voteItemList: [
-                // {
-                //     id: 1,
-                //     group: '专业摄影组',
-                //     photo:['path1', 'path2', 'path3']
-                // },
-                // {
-                //     id: 2,
-                //     group: '专业摄影组',
-                //     photo:['path1', 'path2', 'path3']
-                // }
-            ],
+            voteItemList: [],
             selectedList: [],
             currentGroup: 1,
             nextGroup: 2,
@@ -199,7 +188,6 @@ class VotePage extends React.Component {
             this.errorOpen(9)
         }
         else {
-            //console.log(this.state.selectedList)dasddssdsadsa
             let token = this.props.params.token;
             let url = 'http://api.whusu.com.cn/tt/';
             let list = this.state.selectedList;
